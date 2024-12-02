@@ -1,7 +1,6 @@
 # 26-Dec - Working code - grid, editable, and waterfall
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
 from st_aggrid import AgGrid, GridOptionsBuilder
 
 # Title of the app
@@ -57,36 +56,4 @@ grid_response = AgGrid(
     autoSizeColumns=True,  # Automatically adjust column sizes based on content
     width=300  # Adjust the width of the grid container (in pixels)
 )
-
-# *** START *** WATERFALL CHART 
-
-# Aggregating data for the waterfall chart based on 'Factor L1' and 'Value'
-waterfall_data = df[['Factor L1', 'Value']].groupby('Factor L1').sum().reset_index()
-
-# Create a waterfall chart using Plotly
-waterfall_fig = go.Figure(go.Waterfall(
-    x=waterfall_data['Factor L1'],
-    y=waterfall_data['Value'],
-    text=waterfall_data['Value'].apply(lambda x: f'${x:,.2f}'),
-    textposition="outside",
-    decreasing={"marker": {"color": "red"}},
-    increasing={"marker": {"color": "green"}},
-    totals={"marker": {"color": "blue"}}
-))
-
-# Customize the chart layout
-waterfall_fig.update_layout(
-    title='Waterfall Chart',
-    xaxis_title='Factor',
-    yaxis_title='Value',
-    showlegend=False
-)
-
-# Display the Plotly waterfall chart
-st.plotly_chart(waterfall_fig, use_container_width=True)
-
-
-
-
-
 
